@@ -40,18 +40,22 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
     $ catkin_make
     ```
 
-3. Setup Webots simulation    
-
-* Install Webots R2020a-rev1 (download from https://cyberbotics.com/ )
-
-* Set WEBOTS_HOME variable, add the following line to your "~/.bashrc"
-
+3. Setup CAN-To-USB adapter
+* first time use tracer-ros package
     ```
-    export WEBOTS_HOME=/usr/local/webots
+    $rosrun tracer_bringup setup_can2usb.bash
     ```
-
-    Adjust the path accordingly if you installed Webots to a different place.
-
+* If not the first time use tracer-ros package(Run this command every time you turn off the power)
+    ```
+    $rosrun tracer_bringup bringup_can2usb.bash
+    ```
+*Testing command
+    ```
+    # receiving data from can0
+    $ candump can0
+    # send data to can0
+    $ cansend can0 001#1122334455667788
+    ```
 4. Launch ROS nodes
  
 * Start the base node for the real robot
@@ -60,17 +64,12 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
     $ roslaunch tracer_bringup tracer_robot_base.launch
     ```
 
-* Start the base node for the Webots-based simulator
+* Start the keyboard tele-op node
 
     ```
-    $ roslaunch tracer_bringup tracer_sim_base.launch
+    $ roslaunch tracer_bringup tracer_teleop_keyboard.launch
     ```
 
-* Start the simulator in which basic navigation sensors are set up
-    
-    ```
-    $ roslaunch tracer_bringup tracer_sim_nav_indoor.launch
-    ```
     
 **SAFETY PRECAUSION**: 
 
