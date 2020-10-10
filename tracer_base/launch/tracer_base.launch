@@ -18,5 +18,6 @@
 
         <param name="odom_frame" type="string" value="odom" />
         <param name="base_frame" type="string" value="base_link" />
+
     </node>
 </launch>

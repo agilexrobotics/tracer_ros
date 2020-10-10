@@ -52,6 +52,9 @@ set_property(TARGET tracer_messenger PROPERTY POSITION_INDEPENDENT_CODE ON)
 add_executable(tracer_base_node src/tracer_base_node.cpp)
 target_link_libraries(tracer_base_node tracer_messenger ${catkin_LIBRARIES})
 
+add_executable(tracer_base_sim_node src/tracer_base_sim_node.cpp)
+target_link_libraries(tracer_base_sim_node tracer_messenger ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
