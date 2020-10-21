@@ -49,7 +49,7 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
     ```
     $rosrun tracer_bringup bringup_can2usb.bash
     ```
-*Testing command
+* Testing command
     ```
     # receiving data from can0
     $ candump can0
@@ -63,12 +63,17 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
     ```
     $ roslaunch tracer_bringup tracer_robot_base.launch
     ```
+* Start the gazebo-based simulation
+    ```
+    $ roslaunch tracer_bringup tracer_base_gazeo_sim.launch
+    ```
 
 * Start the keyboard tele-op node
 
     ```
     $ roslaunch tracer_bringup tracer_teleop_keyboard.launch
     ```
+
 
     
 **SAFETY PRECAUSION**: 
