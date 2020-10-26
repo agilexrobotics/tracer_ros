@@ -226,6 +226,7 @@ void TracerROSMessenger::PublishOdometryToROS(double linear, double angular, dou
     position_y_ += d_y;
     theta_ += d_theta;
 
+
     geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(theta_);
 
     // publish tf transformation
