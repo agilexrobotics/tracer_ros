@@ -11,7 +11,7 @@ using namespace westonrobot;
 int main(int argc, char **argv)
 {
     // setup ROS node
-    ros::init(argc, argv, "tracer_odom");
+    ros::init(argc, argv, "tracer_base");
     ros::NodeHandle node(""), private_node("~");
 
     // instantiate a robot object
@@ -38,13 +38,14 @@ int main(int argc, char **argv)
     }
     messenger.SetupSubscription();
 
-    // publish robot state at 20Hz while listening to twist commands
-    ros::Rate rate_20hz(20); // 20Hz
-    while (true)
-    {
-        messenger.PublishStateToROS();
-        ros::spinOnce();
-        rate_20hz.sleep();
+    // publish robot state at 50Hz while listening to twist commands
+    ros::Rate rate_50hz(50);  // 50Hz
+    int cnt = 0;
+    while (ros::ok()) {
+      messenger.PublishStateToROS();
+      ros::spinOnce();
+      rate_50hz.sleep();
+      // if(++cnt == 390) break;
     }
 
     return 0;

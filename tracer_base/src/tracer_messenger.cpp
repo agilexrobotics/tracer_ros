@@ -38,6 +38,7 @@ void TracerROSMessenger::TwistCmdCallback(const geometry_msgs::Twist::ConstPtr &
 {
     if (!simulated_robot_)
     {
+       // std::cout<<"SetMotionCommand:"<<std::endl;
         tracer_->SetMotionCommand(msg->linear.x, msg->angular.z);
     }
     else
