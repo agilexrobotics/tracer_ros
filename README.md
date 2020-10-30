@@ -58,10 +58,15 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
     ```
 4. Launch ROS nodes
  
-* Start the base node for the real robot
+* Start the base node for the real robot whith can
 
     ```
     $ roslaunch tracer_bringup tracer_robot_base.launch
+    ```
+* Start the base node for the real robot whith serial
+
+    ```
+    $ roslaunch tracer_bringup tracer_robot_base_uart.launch
     ```
 * Start the gazebo-based simulation
     ```
