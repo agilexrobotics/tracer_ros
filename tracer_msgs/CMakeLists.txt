@@ -47,10 +47,12 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
     FILES
-    TracerStatus.msg
     TracerMotorState.msg
+    UartTracerMotorState.msg
     TracerLightState.msg
     TracerLightCmd.msg
+    TracerStatus.msg
+    UartTracerStatus.msg
 )
 
 

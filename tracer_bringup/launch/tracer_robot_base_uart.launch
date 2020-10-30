@@ -1,0 +1,9 @@
+<launch>
+    <include file="$(find tracer_base)/launch/tracer_base.launch" >
+        <!-- <arg name="port_name" default="can0" /> -->
+		<arg name="port_name" default="/dev/ttyUSB0" />
+
+        <arg name="simulated_robot" default="false" />
+    </include>
+    <!--include file="$(find tracer_description)/launch/load_nav_model.launch" /-->
+</launch>

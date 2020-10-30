@@ -12,7 +12,7 @@
 #include <tf/transform_broadcaster.h>
 
 #include "tracer_msgs/TracerStatus.h"
-
+#include "tracer_msgs/UartTracerStatus.h"
 namespace westonrobot
 {
 TracerROSMessenger::TracerROSMessenger(ros::NodeHandle *nh) : tracer_(nullptr), nh_(nh)
@@ -28,6 +28,7 @@ void TracerROSMessenger::SetupSubscription()
     // odometry publisher
     odom_publisher_ = nh_->advertise<nav_msgs::Odometry>(odom_frame_, 50);
     status_publisher_ = nh_->advertise<tracer_msgs::TracerStatus>("/tracer_status", 10);
+    status_uart_publisher_ = nh_->advertise<tracer_msgs::UartTracerStatus>("/uart_tracer_status", 10);
 
     // cmd subscriber
     motion_cmd_subscriber_ = nh_->subscribe<geometry_msgs::Twist>("/cmd_vel", 5, &TracerROSMessenger::TwistCmdCallback, this); //不启用平滑包则订阅“cmd_vel”
@@ -38,7 +39,6 @@ void TracerROSMessenger::TwistCmdCallback(const geometry_msgs::Twist::ConstPtr &
 {
     if (!simulated_robot_)
     {
-       // std::cout<<"SetMotionCommand:"<<std::endl;
         tracer_->SetMotionCommand(msg->linear.x, msg->angular.z);
     }
     else
@@ -168,6 +168,56 @@ void TracerROSMessenger::PublishStateToROS()
     status_msg.front_light_state.mode = state.front_light_state.mode;
     status_msg.front_light_state.custom_value = state.front_light_state.custom_value;
     status_publisher_.publish(status_msg);
+
+    // publish odometry and tf
+    PublishOdometryToROS(state.linear_velocity, state.angular_velocity, dt);
+
+    // record time for next integration
+    last_time_ = current_time_;
+}
+void TracerROSMessenger::PublishUartStateToROS()
+{
+    int i;
+    current_time_ = ros::Time::now();
+    double dt = (current_time_ - last_time_).toSec();
+
+    static bool init_run = true;
+    if (init_run)
+    {
+        last_time_ = current_time_;
+        init_run = false;
+        return;
+    }
+
+    auto state = tracer_->GetUartTracerState();
+
+    // publish scout state message
+    tracer_msgs::UartTracerStatus status_msg;
+
+    status_msg.header.stamp = current_time_;
+
+    status_msg.linear_velocity = state.linear_velocity;
+    status_msg.angular_velocity = state.angular_velocity;
+
+    status_msg.base_state = state.base_state;
+    status_msg.control_mode = state.control_mode;
+    status_msg.fault_code = state.fault_code;
+    status_msg.battery_voltage = state.battery_voltage;
+
+    for (int i = 0; i < 2; ++i)
+    {
+        status_msg.motor_states[i].current = state.motor_states[i].current;
+        status_msg.motor_states[i].rpm = state.motor_states[i].rpm;
+        status_msg.motor_states[i].temperature = state.motor_states[i].temperature;
+    }
+
+    status_msg.light_control_enabled = state.light_control_enabled;
+    status_msg.front_light_state.mode = state.front_light_state.mode;
+    status_msg.front_light_state.custom_value = state.front_light_state.custom_value;
+    status_msg.rear_light_state.mode = state.rear_light_state.mode;
+    status_msg.rear_light_state.custom_value = state.front_light_state.custom_value;
+
+    status_uart_publisher_.publish(status_msg);
 
     // publish odometry and tf
     PublishOdometryToROS(state.linear_velocity, state.angular_velocity, dt);

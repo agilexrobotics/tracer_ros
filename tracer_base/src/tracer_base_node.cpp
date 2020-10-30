@@ -33,20 +33,21 @@ int main(int argc, char **argv)
     }
     else
     {
-      ROS_ERROR("Only CAN bus interface is supported for now");
-      return -1;
+        robot.Connect(port_name, 115200);
+        ROS_INFO("Using UART to talk with the robot");
     }
     messenger.SetupSubscription();
 
     // publish robot state at 50Hz while listening to twist commands
     ros::Rate rate_50hz(50);  // 50Hz
-    int cnt = 0;
+    //int cnt = 0;
     while (ros::ok()) {
-      messenger.PublishStateToROS();
+      if (port_name.find("can") != std::string::npos)
+          messenger.PublishStateToROS();
+      else  messenger.PublishUartStateToROS();
       ros::spinOnce();
       rate_50hz.sleep();
       // if(++cnt == 390) break;
     }
-
     return 0;
 }
