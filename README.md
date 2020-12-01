@@ -34,8 +34,8 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
 
     ```
     $ cd ~/catkin_ws/src
-    $ git clone https://github.com/agilexrobotics/agx_sdk.git
-    $ git clone https://github.com/agilexrobotics/tracer_ros.git
+    $ git clone --depth 1 https://github.com/agilexrobotics/agx_sdk.git
+    $ git clone --depth 1 https://github.com/agilexrobotics/tracer_ros.git
     $ cd ..
     $ catkin_make
     ```
@@ -57,7 +57,7 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
     $ cansend can0 001#1122334455667788
     ```
 4. Launch ROS nodes
- 
+
 * Start the base node for the real robot whith can
 
     ```
@@ -80,7 +80,7 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
     ```
 
 
-    
+​    
 **SAFETY PRECAUSION**: 
 
 Always have your remote controller ready to take over the control whenever necessary. 
