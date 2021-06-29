@@ -20,7 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
    #tracer_sdk
     tf2 
     tf2_ros
-    wrp_sdk
+    ugv_sdk
 )
     
 # find_package(Boost REQUIRED COMPONENTS chrono)

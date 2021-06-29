@@ -118,7 +118,6 @@ void TracerROSMessenger::LightCmdCallback(const tracer_msgs::TracerLightCmd::Con
         }
         else
         {
-            tracer_->DisableLightCmdControl();
         }
     }
     else
@@ -154,14 +153,14 @@ void TracerROSMessenger::PublishStateToROS()
     status_msg.control_mode = state.control_mode;
     status_msg.fault_code = state.fault_code;
     status_msg.battery_voltage = state.battery_voltage;
-    status_msg.right_odomter=state.right_odomter;
-    status_msg.left_odomter=state.left_odomter;
+    status_msg.right_odomter=state.right_odometry;
+    status_msg.left_odomter=state.left_odometry;
 
     for (int i = 0; i < 2; ++i)
     {
-        //status_msg.motor_states[i].current = state.motor_states[i].current;
-        status_msg.motor_states[i].rpm = state.motor_states[i].rpm;
-       // status_msg.motor_states[i].temperature = state.motor_states[i].temperature;
+        //status_msg.motor_states[i]. = state.motor_states[i].current;
+        status_msg.motor_states[i].rpm = state.actuator_states[i].motor_rpm;
+        //status_msg.motor_states[i].temperature = state.motor_states[i].temperature;
     }
 
     status_msg.light_control_enabled = state.light_control_enabled;
