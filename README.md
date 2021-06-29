@@ -22,10 +22,6 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
     $ sudo apt install ros-$ROS_DISTRO-teleop-twist-keyboard
     $ sudo apt install ros-$ROS_DISTRO-joint-state-publisher-gui
     $ sudo apt install ros-$ROS_DISTRO-ros-controllers
-    $ sudo apt install ros-$ROS_DISTRO-webots-ros
-    ```
-    ```
-    $ sudo apt install libasio-dev
     ```
     
 2. Clone the packages into your catkin workspace and compile
@@ -34,8 +30,8 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
 
     ```
     $ cd ~/catkin_ws/src
-    $ git clone --depth 1 https://github.com/agilexrobotics/agx_sdk.git
-    $ git clone --depth 1 https://github.com/agilexrobotics/tracer_ros.git
+    $ git clone --recursive https://github.com/agilexrobotics/ugv_sdk.git
+    $ git clone https://github.com/agilexrobotics/tracer_ros.git
     $ cd ..
     $ catkin_make
     ```
