@@ -174,56 +174,56 @@ void TracerROSMessenger::PublishStateToROS()
     // record time for next integration
     last_time_ = current_time_;
 }
-void TracerROSMessenger::PublishUartStateToROS()
-{
-    int i;
-    current_time_ = ros::Time::now();
-    double dt = (current_time_ - last_time_).toSec();
+//void TracerROSMessenger::PublishUartStateToROS()
+//{
+//    int i;
+//    current_time_ = ros::Time::now();
+//    double dt = (current_time_ - last_time_).toSec();
 
-    static bool init_run = true;
-    if (init_run)
-    {
-        last_time_ = current_time_;
-        init_run = false;
-        return;
-    }
+//    static bool init_run = true;
+//    if (init_run)
+//    {
+//        last_time_ = current_time_;
+//        init_run = false;
+//        return;
+//    }
 
-    auto state = tracer_->GetUartTracerState();
+//    auto state = tracer_->GetUartTracerState();
 
-    // publish scout state message
-    tracer_msgs::UartTracerStatus status_msg;
+//    // publish scout state message
+//    tracer_msgs::UartTracerStatus status_msg;
 
-    status_msg.header.stamp = current_time_;
+//    status_msg.header.stamp = current_time_;
 
-    status_msg.linear_velocity = state.linear_velocity;
-    status_msg.angular_velocity = state.angular_velocity;
+//    status_msg.linear_velocity = state.linear_velocity;
+//    status_msg.angular_velocity = state.angular_velocity;
 
-    status_msg.base_state = state.base_state;
-    status_msg.control_mode = state.control_mode;
-    status_msg.fault_code = state.fault_code;
-    status_msg.battery_voltage = state.battery_voltage;
+//    status_msg.base_state = state.base_state;
+//    status_msg.control_mode = state.control_mode;
+//    status_msg.fault_code = state.fault_code;
+//    status_msg.battery_voltage = state.battery_voltage;
 
-    for (int i = 0; i < 2; ++i)
-    {
-        status_msg.motor_states[i].current = state.motor_states[i].current;
-        status_msg.motor_states[i].rpm = state.motor_states[i].rpm;
-        status_msg.motor_states[i].temperature = state.motor_states[i].temperature;
-    }
+//    for (int i = 0; i < 2; ++i)
+//    {
+//        status_msg.motor_states[i].current = state.motor_states[i].current;
+//        status_msg.motor_states[i].rpm = state.motor_states[i].rpm;
+//        status_msg.motor_states[i].temperature = state.motor_states[i].temperature;
+//    }
 
-    status_msg.light_control_enabled = state.light_control_enabled;
-    status_msg.front_light_state.mode = state.front_light_state.mode;
-    status_msg.front_light_state.custom_value = state.front_light_state.custom_value;
-    status_msg.rear_light_state.mode = state.rear_light_state.mode;
-    status_msg.rear_light_state.custom_value = state.front_light_state.custom_value;
+//    status_msg.light_control_enabled = state.light_control_enabled;
+//    status_msg.front_light_state.mode = state.front_light_state.mode;
+//    status_msg.front_light_state.custom_value = state.front_light_state.custom_value;
+//    status_msg.rear_light_state.mode = state.rear_light_state.mode;
+//    status_msg.rear_light_state.custom_value = state.front_light_state.custom_value;
 
-    status_uart_publisher_.publish(status_msg);
+//    status_uart_publisher_.publish(status_msg);
 
-    // publish odometry and tf
-    PublishOdometryToROS(state.linear_velocity, state.angular_velocity, dt);
+//    // publish odometry and tf
+//    PublishOdometryToROS(state.linear_velocity, state.angular_velocity, dt);
 
-    // record time for next integration
-    last_time_ = current_time_;
-}
+//    // record time for next integration
+//    last_time_ = current_time_;
+//}
 
 void TracerROSMessenger::PublishSimStateToROS(double linear, double angular)
 {

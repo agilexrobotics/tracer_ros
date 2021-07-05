@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     while (ros::ok()) {
       if (port_name.find("can") != std::string::npos)
           messenger.PublishStateToROS();
-      else  messenger.PublishUartStateToROS();
+     // else  messenger.PublishUartStateToROS();
       ros::spinOnce();
       rate_50hz.sleep();
       // if(++cnt == 390) break;
