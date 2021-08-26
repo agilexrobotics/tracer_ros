@@ -5,16 +5,13 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 
-#include "ugv_sdk/tracer/tracer_base.hpp"
 #include "tracer_base/tracer_messenger.hpp"
 
 using namespace westonrobot;
 
-TracerBase robot;
-
+std::unique_ptr<TracerRobot> robot;
 void DetachRobot(int signal) {
-  robot.Disconnect();
-  robot.Terminate();
+  robot->DisableLightControl();
 }
 
 int main(int argc, char **argv)
@@ -26,8 +23,8 @@ int main(int argc, char **argv)
     std::signal(SIGINT, DetachRobot);
 
     // instantiate a robot object
-    TracerBase robot;
-    TracerROSMessenger messenger(&robot, &node);
+
+    TracerROSMessenger messenger(robot.get(),&node);
 
     // fetch parameters before connecting to robot
     std::string port_name;

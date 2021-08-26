@@ -17,16 +17,15 @@
 #include <tf2_ros/transform_broadcaster.h>
 
 #include "tracer_msgs/TracerLightCmd.h"
-#include "ugv_sdk/tracer/tracer_base.hpp"
-
+#include "ugv_sdk/mobile_robot/tracer_robot.hpp"
 namespace westonrobot
 {
 
-class TracerROSMessenger
+class TracerROSMessenger: protected TracerRobot
 {
 public:
     explicit TracerROSMessenger(ros::NodeHandle *nh);
-    TracerROSMessenger(TracerBase *Tracer, ros::NodeHandle *nh);
+    TracerROSMessenger(TracerRobot *Tracer, ros::NodeHandle *nh);
 
     std::string odom_frame_;
     std::string base_frame_;
@@ -41,9 +40,10 @@ public:
     void PublishSimStateToROS(double linear, double angular);
 
     void GetCurrentMotionCmdForSim(double &linear, double &angular);
+    void DetachRobot();
 
 private:
-    TracerBase *tracer_;
+    TracerRobot *tracer_;
     ros::NodeHandle *nh_;
 
     std::mutex twist_mutex_;

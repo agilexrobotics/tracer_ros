@@ -8,11 +8,10 @@
 
 using namespace westonrobot;
 
-TracerBase robot;
+std::unique_ptr<TracerRobot> robot;
 
 void DetachRobot(int signal) {
-  robot.Disconnect();
-  robot.Terminate();
+  robot->DisableLightControl();
 }
 
 int main(int argc, char **argv)
@@ -23,9 +22,11 @@ int main(int argc, char **argv)
 
     std::signal(SIGINT, DetachRobot);
 
-    // instantiate a robot object
-    TracerBase robot;
-    TracerROSMessenger messenger(&robot, &node);
+    robot = std::unique_ptr<TracerRobot>(new TracerRobot());
+    if (robot == nullptr)
+        std::cout << "Failed to create robot object" << std::endl;
+
+    TracerROSMessenger messenger(robot.get(), &node);
 
     // fetch parameters before connecting to robot
     std::string port_name;
@@ -37,12 +38,13 @@ int main(int argc, char **argv)
     // connect to robot and setup ROS subscription
     if (port_name.find("can") != std::string::npos)
     {
-        robot.Connect(port_name);
+        robot->Connect(port_name);
+        robot->EnableCommandedMode();
         ROS_INFO("Using CAN bus to talk with the robot");
     }
     else
     {
-        robot.Connect(port_name, 115200);
+        robot->Connect(port_name, 115200);
         ROS_INFO("Using UART to talk with the robot");
     }
     messenger.SetupSubscription();
@@ -56,7 +58,6 @@ int main(int argc, char **argv)
      // else  messenger.PublishUartStateToROS();
       ros::spinOnce();
       rate_50hz.sleep();
-      // if(++cnt == 390) break;
     }
     return 0;
 }
