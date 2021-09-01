@@ -8,7 +8,7 @@
 
 ## Communication interface setup
 
-Please refer to the [README](https://github.com/agilexrobotics/agx_sdk#hardware-interface) of "agx_sdk" package for setup of communication interfaces.
+Please refer to the [README](https://github.com/agilexrobotics/ugv_sdk#hardware-interface) of "ugv_sdk" package for setup of communication interfaces.
 
 #### Note on CAN interface on Nvidia Jetson Platforms
 
@@ -30,27 +30,24 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
 
     ```
     $ cd ~/catkin_ws/src
-    $ git clone --recursive https://github.com/agilexrobotics/ugv_sdk.git
+    $ git clone https://github.com/agilexrobotics/ugv_sdk.git
     $ git clone https://github.com/agilexrobotics/tracer_ros.git
     $ cd ..
     $ catkin_make
     ```
 
 3. Setup CAN-To-USB adapter
+* Enable gs_usb kernel module(If you have already added this module, you do not need to add it)
+    ```
+    $ sudo modprobe gs_usb
+    ```
 * first time use tracer-ros package
     ```
     $rosrun tracer_bringup setup_can2usb.bash
     ```
-* If not the first time use tracer-ros package(Run this command every time you turn off the power)
+* If not the first time use tracer-ros package(Run this command every time you turn on the power)
     ```
     $rosrun tracer_bringup bringup_can2usb.bash
-    ```
-* Testing command
-    ```
-    # receiving data from can0
-    $ candump can0
-    # send data to can0
-    $ cansend can0 001#1122334455667788
     ```
 4. Launch ROS nodes
 
@@ -59,24 +56,13 @@ Nvidia Jeston TX2/Xavier/XavierNX have CAN controller(s) integrated in the main 
     ```
     $ roslaunch tracer_bringup tracer_robot_base.launch
     ```
-* Start the base node for the real robot whith serial
-
-    ```
-    $ roslaunch tracer_bringup tracer_robot_base_uart.launch
-    ```
-* Start the gazebo-based simulation
-    ```
-    $ roslaunch tracer_bringup tracer_base_gazeo_sim.launch
-    ```
-
 * Start the keyboard tele-op node
 
     ```
     $ roslaunch tracer_bringup tracer_teleop_keyboard.launch
     ```
 
-
-​    
 **SAFETY PRECAUSION**: 
 
 Always have your remote controller ready to take over the control whenever necessary. 
+
