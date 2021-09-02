@@ -32,7 +32,15 @@ int main(int argc, char **argv)
     // connect to robot and setup ROS subscription
     if (port_name.find("can") != std::string::npos)
     {
-        robot->Connect(port_name);
+        try
+        {
+            robot->Connect(port_name);
+        }
+        catch (std::exception error)
+        {
+            ROS_ERROR("please bringup up can or make sure can port exist");
+            ros::shutdown();
+        }
         robot->EnableCommandedMode();
         ROS_INFO("Using CAN bus to talk with the robot");
     }
