@@ -156,7 +156,7 @@ void TracerROSMessenger::PublishStateToROS()
     status_msg.base_state = robot_state.system_state.vehicle_state;
     status_msg.control_mode = robot_state.system_state.control_mode;
     status_msg.fault_code = robot_state.system_state.error_code;
-    status_msg.battery_voltage = robot_state.system_state.battery_voltage;
+    status_msg.battery_voltage = robot_state.system_state.battery_voltage*0.1;
 //    status_msg.right_odomter=robot_state.;
 //    status_msg.left_odomter=robot_state.left_odometry;
 
