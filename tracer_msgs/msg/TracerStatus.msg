@@ -18,6 +18,7 @@ uint8 control_mode
 uint8 fault_code
 float64 battery_voltage
 
+
 # motor state
 TracerMotorState[2] motor_states
 

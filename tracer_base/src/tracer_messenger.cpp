@@ -31,6 +31,8 @@ void TracerROSMessenger::SetupSubscription()
     // odometry publisher
     odom_publisher_ = nh_->advertise<nav_msgs::Odometry>(odom_frame_, 50);
     status_publisher_ = nh_->advertise<tracer_msgs::TracerStatus>("/tracer_status", 10);
+    rs_status_publisher_ = nh_->advertise<tracer_msgs::TracerRsStatus>("/tracer_rs_status", 10);
+
     status_uart_publisher_ = nh_->advertise<tracer_msgs::UartTracerStatus>("/uart_tracer_status", 10);
 
     // cmd subscriber
@@ -147,6 +149,7 @@ void TracerROSMessenger::PublishStateToROS()
 
     // publish tracer state message
     tracer_msgs::TracerStatus status_msg;
+    tracer_msgs::TracerRsStatus rs_status;
 
     status_msg.header.stamp = current_time_;
 
@@ -156,7 +159,22 @@ void TracerROSMessenger::PublishStateToROS()
     status_msg.base_state = robot_state.system_state.vehicle_state;
     status_msg.control_mode = robot_state.system_state.control_mode;
     status_msg.fault_code = robot_state.system_state.error_code;
-    status_msg.battery_voltage = robot_state.system_state.battery_voltage;
+    status_msg.battery_voltage = robot_state.system_state.battery_voltage *0.1;
+
+    rs_status.header.stamp = current_time_;
+    rs_status.stick_left_h = robot_state.rc_state.stick_left_h;
+    rs_status.stick_left_v = robot_state.rc_state.stick_left_v;
+    rs_status.stick_right_h = robot_state.rc_state.stick_right_h;
+    rs_status.stick_right_v = robot_state.rc_state.stick_right_v;
+    rs_status.swa = robot_state.rc_state.swa;
+    rs_status.swb = robot_state.rc_state.swb;
+    rs_status.swc = robot_state.rc_state.swc;
+    rs_status.swd = robot_state.rc_state.swd;
+    rs_status.var_a = robot_state.rc_state.var_a;
+    
+    rs_status_publisher_.publish(rs_status);
+
+
 //    status_msg.right_odomter=robot_state.;
 //    status_msg.left_odomter=robot_state.left_odometry;
 

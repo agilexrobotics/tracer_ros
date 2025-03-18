@@ -18,6 +18,7 @@
 
 #include "tracer_msgs/TracerLightCmd.h"
 #include "ugv_sdk/mobile_robot/tracer_robot.hpp"
+#include "tracer_msgs/TracerRsStatus.h"
 namespace westonrobot
 {
 
@@ -51,6 +52,7 @@ private:
 
     ros::Publisher odom_publisher_;
     ros::Publisher status_publisher_;
+    ros::Publisher rs_status_publisher_;
     ros::Publisher status_uart_publisher_;
     ros::Subscriber motion_cmd_subscriber_;
     ros::Subscriber light_cmd_subscriber_;
