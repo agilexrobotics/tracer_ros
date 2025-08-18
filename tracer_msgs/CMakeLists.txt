@@ -54,6 +54,7 @@ add_message_files(
     TracerStatus.msg
     TracerRsStatus.msg
     UartTracerStatus.msg
+    TracerBmsStatus.msg
 )
 
 

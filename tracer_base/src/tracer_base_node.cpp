@@ -16,7 +16,9 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "tracer_base");
     ros::NodeHandle node(""), private_node("~");
 
-    robot = std::unique_ptr<TracerRobot>(new TracerRobot());
+    // robot = std::unique_ptr<TracerRobot>(new TracerRobot());
+    std::unique_ptr<TracerRobot> robot;
+
     if (robot == nullptr)
         std::cout << "Failed to create robot object" << std::endl;
 
