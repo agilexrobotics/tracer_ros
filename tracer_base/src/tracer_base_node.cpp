@@ -4,11 +4,14 @@
 #include <sensor_msgs/JointState.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
+
 #include "tracer_base/tracer_messenger.hpp"
+#include "ugv_sdk/utilities/protocol_detector.hpp"
+#include "ugv_sdk/mobile_robot/tracer_robot.hpp"
 
 using namespace westonrobot;
 
-std::unique_ptr<TracerRobot> robot;
+std::shared_ptr<TracerRobot> robot;
 
 int main(int argc, char **argv)
 {
@@ -17,12 +20,38 @@ int main(int argc, char **argv)
     ros::NodeHandle node(""), private_node("~");
 
     // robot = std::unique_ptr<TracerRobot>(new TracerRobot());
-    std::unique_ptr<TracerRobot> robot;
+    std::unique_ptr<TracerRobot> tracer;
+    ProtocolDetector detector;
+    try
+    {
+        detector.Connect("can0");
+        auto proto = detector.DetectProtocolVersion(5);
+        if (proto == ProtocolVersion::AGX_V1) {
+            std::cout << "Detected protocol: AGX_V1" << std::endl;
+            tracer = std::unique_ptr<TracerRobot>(
+            new TracerRobot(ProtocolVersion::AGX_V1));
+        }
+        else if (proto == ProtocolVersion::AGX_V2)
+        {
+            std::cout << "Detected protocol: AGX_V2" << std::endl;
+            tracer = std::unique_ptr<TracerRobot>(
+            new TracerRobot(ProtocolVersion::AGX_V2));
+        }
+        else
+        {
+            std::cout << "Detected protocol: UNKONWN" << std::endl;
+            return -1;
+        }
 
-    if (robot == nullptr)
-        std::cout << "Failed to create robot object" << std::endl;
+    }
+    catch (std::exception error)
+    {
+        ROS_ERROR("please bringup up can or make sure can port exist");
+        ros::shutdown();
+    }
 
-    TracerROSMessenger messenger(robot.get(), &node);
+
+    TracerROSMessenger messenger(tracer.get(), &node);
 
     // fetch parameters before connecting to robot
     std::string port_name;
@@ -36,14 +65,14 @@ int main(int argc, char **argv)
     {
         try
         {
-            robot->Connect(port_name);
+            tracer->Connect(port_name);
         }
         catch (std::exception error)
         {
             ROS_ERROR("please bringup up can or make sure can port exist");
             ros::shutdown();
         }
-        robot->EnableCommandedMode();
+        tracer->EnableCommandedMode();
         ROS_INFO("Using CAN bus to talk with the robot");
     }
     else

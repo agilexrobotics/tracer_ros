@@ -10,17 +10,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 find_package(catkin REQUIRED COMPONENTS    
-#    roslaunch
-#    roslint
-    roscpp 
-    sensor_msgs
-    std_msgs
-    geometry_msgs
-    tracer_msgs
-   #tracer_sdk
-    tf2 
-    tf2_ros
-    ugv_sdk
+  roslaunch 
+  roscpp 
+  sensor_msgs
+  std_msgs
+  geometry_msgs
+  tf2 
+  tf2_ros
+  ugv_sdk
+  tracer_msgs
 )
     
 # find_package(Boost REQUIRED COMPONENTS chrono)
@@ -32,6 +30,8 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES tracer_messenger
+  CATKIN_DEPENDS ugv_sdk tracer_msgs
+
 # CATKIN_DEPENDS tracer_msgs roscpp sensor_msgs
 #   DEPENDS Boost
 )
